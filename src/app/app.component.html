@@ -1,0 +1,42 @@
+<div class="container">
+  <h1 class="text-black text-center">Todo</h1>
+  <form (ngSubmit)="addTodo()">
+    <div class="form-group">
+      <label for="task">Enter task</label>
+      <input type="text" class="form-control" id="task" [(ngModel)]="newTask" name="newTask" placeholder="Enter your task" required>
+      <small id="taskError" class="form-text text-muted" *ngIf="!newTask.trim()">Field required</small>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="!newTask.trim()">Add Task</button>
+  </form>
+
+  <table class="table mt-4">
+    <thead>
+      <tr>
+        <th>SI no:</th>
+        <th scope="col">Task</th>
+        <th scope="col">Completed</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let todo of todos; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>
+          <span *ngIf="editingId !== todo.id">{{ todo.task }}</span>
+          <input *ngIf="editingId === todo.id" type="text" [(ngModel)]="todo.task" class="form-control">
+        </td>
+        <td>
+          <input type="checkbox" class="form-check-input" [checked]="todo.completed" (change)="toggleComplete(todo)">
+          <label class="form-check-label">{{ todo.completed ? 'Completed' : 'Pending' }}</label>
+        </td>
+        <td>
+          <div class="container d-flex gap-2">
+            <button class="btn btn-danger btn-sm" (click)="deleteTodo(todo.id)">Delete</button>
+            <button *ngIf="editingId !== todo.id" class="btn btn-warning btn-sm" (click)="startEdit(todo.id)">Edit</button>
+            <button *ngIf="editingId === todo.id" class="btn btn-success btn-sm" (click)="saveEdit(todo)">Save</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
